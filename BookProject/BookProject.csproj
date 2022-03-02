@@ -5,7 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\lib\" />
+    <Folder Include="Migrations\" />
+    <Folder Include="wwwroot\lib\font-awesome\" />
   </ItemGroup>
 
   <ItemGroup>

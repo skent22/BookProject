@@ -37,6 +37,8 @@ namespace BookProject.Models
         public string Zip { get; set; }
         [Required(ErrorMessage = "Please enter a valid country")]
         public string Country { get; set; }
+        [BindNever]
+        public bool OrderShipped { get; set; }
 
     }
 }

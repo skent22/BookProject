@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using BookProject.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace BookProject
 {
@@ -31,6 +32,12 @@ namespace BookProject
            {
                options.UseSqlite(Configuration["ConnectionStrings:BookDBConnection"]);
            });
+
+            services.AddDbContext<AppIdentityDBContext>(options =>
+               options.UseSqlite(Configuration["ConnectionStrings:IdentityConnection"]));
+
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<AppIdentityDBContext>();
 
             services.AddScoped<IBookProjectRepository, EFBookProjectRepository>();
             services.AddScoped<IPurchaseRepository, EFPurchaseRepository>();
@@ -58,6 +65,9 @@ namespace BookProject
             app.UseSession();
             app.UseRouting();
 
+            app.UseAuthentication();
+            app.UseAuthorization();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute("categorypage",
@@ -79,6 +89,10 @@ namespace BookProject
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/admin/{*catchall}", "/Admin/Index");
             });
+
+            IdentitySeedData.EnsurePopulated(app);
+
+
         }
     }
 }
